@@ -18,7 +18,7 @@ def ExtractSubPayload (filename):
 		os.exit(1)
 	fp = open(filename)
 	msg = email.message_from_file(fp)
-
+	payload = msg.get_payload()
 	if type(payload) == type(list()) :
 		payload = payload[0] # only use the first part of payload
 	sub = msg.get('subject')
@@ -26,6 +26,7 @@ def ExtractSubPayload (filename):
 	if type(payload) != type('') :
 		payload = str(payload)
 	payload = re.sub('<[^<]+?>', '', payload)
+	payload = re.sub(r"(?m)^Content-.*\n?", '', payload)
 	return sub + payload
 
 def ExtractBodyFromDir ( srcdir, dstdir ):
